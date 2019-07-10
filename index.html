@@ -13,7 +13,7 @@
             <div class="container">
                 <div class="dot dot-1" ng-style="{'margin-top': index1 + 'px'}"></div>
                 <div class="dot dot-2" ng-style="{'margin-top': index2 + 'px'}"></div>
-                <button ng-click="!$scope.waveClickDisabled ? startMoving()">Change</button>
+                <button ng-click="startMoving()">Change</button>
             </div>
             <div ng-click="wave()" class="ball" ng-style="{'border-radius': corner[0] + '% ' + corner[1] + '% ' + corner[2] + '% ' + corner[3] + '%'}"></div>
         </div>
@@ -42,7 +42,6 @@
                         }
                     };
                     $scope.corner = [50, 50, 50, 50];
-                    $scope.waveClickDisabled = false;
                     $scope.changeCorner = function(index, until, positive) {
                         if (positive) {
                             if ($scope.corner[index] < until) {
@@ -68,10 +67,6 @@
                     $scope.wave = function() {
                         let sizeOfWave = 7;
                         let gap = 350;
-                        $scope.waveClickDisabled = true;
-                        $timeout(function() {
-                            $scope.waveClickDisabled = false;
-                        }, 3000);
                         $scope.changeCorner(0, 50 - sizeOfWave, false);
                         $timeout(function() {
                             $scope.changeCorner(1, 50 - sizeOfWave, false);

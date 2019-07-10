@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Testing
+        </title>
+    </head>
+    <body>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="styles.css">
+        <div ng-app="myApp" ng-controller="myCtrl" style="height: 100%; width: 100%">
+            <div class="container">
+                <div class="dot dot-1" ng-style="{'margin-top': index1 + 'px'}"></div>
+                <div class="dot dot-2" ng-style="{'margin-top': index2 + 'px'}"></div>
+                <button ng-click="!$scope.waveClickDisabled ? startMoving()">Change</button>
+            </div>
+            <div ng-click="wave()" class="ball" ng-style="{'border-radius': corner[0] + '% ' + corner[1] + '% ' + corner[2] + '% ' + corner[3] + '%'}"></div>
+        </div>
+        <script>
+            angular.module('myApp', [])
+                .controller('myCtrl', function($scope, $timeout) {
+                    $scope.index1 = 0;
+                    $scope.index2 = 100;
+                    $scope.startMoving = function() {
+                        $scope.iterate($scope.index1 < $scope.index2);
+                    };
+                    $scope.iterate = function(incrementFirst) {
+                        if (incrementFirst && $scope.index1 < 100 || !incrementFirst && $scope.index2 < 100) {
+                            if (incrementFirst) {
+                                $scope.index1++;
+                                $scope.index2--;
+                            } else {
+                                $scope.index1--;
+                                $scope.index2++;
+                            }
+                            $timeout(function() {
+                                $scope.iterate(incrementFirst);
+                            }, 10);
+                        } else {
+                            console.log($scope.index1, $scope.index2);
+                        }
+                    };
+                    $scope.corner = [50, 50, 50, 50];
+                    $scope.waveClickDisabled = false;
+                    $scope.changeCorner = function(index, until, positive) {
+                        if (positive) {
+                            if ($scope.corner[index] < until) {
+                                $scope.corner[index] += 0.1;
+                                $timeout(function() {
+                                    $scope.changeCorner(index, until, positive);
+                                }, 10);
+                            } else {
+                                $scope.corner[index] = until;
+                            }
+                        } else {
+                            if ($scope.corner[index] > until) {
+                                $scope.corner[index] -= 0.1;
+                                $timeout(function() {
+                                    $scope.changeCorner(index, until, positive);
+                                }, 10);
+                            } else {
+                                $scope.corner[index] = until;
+                                $scope.changeCorner(index, 50, true);
+                            }
+                        }
+                    }
+                    $scope.wave = function() {
+                        let sizeOfWave = 7;
+                        let gap = 350;
+                        $scope.waveClickDisabled = true;
+                        $timeout(function() {
+                            $scope.waveClickDisabled = false;
+                        }, 3000);
+                        $scope.changeCorner(0, 50 - sizeOfWave, false);
+                        $timeout(function() {
+                            $scope.changeCorner(1, 50 - sizeOfWave, false);
+                            $timeout(function() {
+                                $scope.changeCorner(2, 50 - sizeOfWave, false);
+                                $timeout(function() {
+                                    $scope.changeCorner(3, 50 - sizeOfWave, false);
+                                }, gap);
+                            }, gap);
+                        }, gap);
+                    };
+                });
+        </script>
+    </body>
+</html>
